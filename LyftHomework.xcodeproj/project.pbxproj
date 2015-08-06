@@ -13,6 +13,8 @@
 		A177A63E1B73DCBA00334542 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A177A63D1B73DCBA00334542 /* Images.xcassets */; };
 		A177A6411B73DCBA00334542 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A177A63F1B73DCBA00334542 /* LaunchScreen.xib */; };
 		A177A64D1B73DCBA00334542 /* LyftHomeworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A64C1B73DCBA00334542 /* LyftHomeworkTests.swift */; };
+		A177A6571B73FA2600334542 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6561B73FA2600334542 /* Trip.swift */; };
+		A177A6591B73FAC900334542 /* TripMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6581B73FAC900334542 /* TripMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		A177A6461B73DCBA00334542 /* LyftHomeworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LyftHomeworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A177A64B1B73DCBA00334542 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A177A64C1B73DCBA00334542 /* LyftHomeworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyftHomeworkTests.swift; sourceTree = "<group>"; };
+		A177A6561B73FA2600334542 /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		A177A6581B73FAC900334542 /* TripMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				A177A6361B73DCBA00334542 /* AppDelegate.swift */,
+				A177A6581B73FAC900334542 /* TripMonitor.swift */,
+				A177A6561B73FA2600334542 /* Trip.swift */,
 				A177A6381B73DCBA00334542 /* TripsViewController.swift */,
 				A177A63A1B73DCBA00334542 /* Main.storyboard */,
 				A177A63D1B73DCBA00334542 /* Images.xcassets */,
@@ -212,8 +218,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A177A6571B73FA2600334542 /* Trip.swift in Sources */,
 				A177A6391B73DCBA00334542 /* TripsViewController.swift in Sources */,
 				A177A6371B73DCBA00334542 /* AppDelegate.swift in Sources */,
+				A177A6591B73FAC900334542 /* TripMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +417,7 @@
 				A177A6521B73DCBA00334542 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A177A6531B73DCBA00334542 /* Build configuration list for PBXNativeTarget "LyftHomeworkTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +426,7 @@
 				A177A6551B73DCBA00334542 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

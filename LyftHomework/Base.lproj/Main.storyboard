@@ -28,6 +28,9 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OpK-Td-Pgv">
                                         <rect key="frame" x="251" y="14" width="51" height="31"/>
                                         <color key="onTintColor" red="0.15686274509803921" green="0.54117647058823526" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="onOffToggled:" destination="vXZ-lx-hvc" eventType="valueChanged" id="NqA-Sj-gpG"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

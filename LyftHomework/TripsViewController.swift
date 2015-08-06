@@ -19,6 +19,18 @@ class TripsViewController: UIViewController, UITableViewDataSource {
         tableView.dataSource = self
     }
     
+    // MARK: on/off switch 
+    
+    @IBAction func onOffToggled(sender: UISwitch) {
+        if sender.on {
+            TripMonitor.sharedMonitor().enableMonitoring()
+        } else {
+            TripMonitor.sharedMonitor().disableMonitoring()
+        }
+    }
+    
+    // MARK: UITableViewDataSource
+    
     func tableView(tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         assert(numberOfRowsInSection == 0)
         return fakeData.count
