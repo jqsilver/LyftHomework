@@ -14,6 +14,8 @@ class TripsViewController: UIViewController, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
+        
         tableView.dataSource = self
     }
     
