@@ -1,6 +1,10 @@
 import Foundation
 import CoreLocation
 
+protocol TripMonitorDelegate: class {
+    func tripsDidChange()
+}
+
 // TODO: perist trips
 class TripMonitor: NSObject, CLLocationManagerDelegate {
 
@@ -17,11 +21,17 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     private var hasPermission: Bool? = nil
     
     private var currentTrip: PendingTrip? = nil
-    private var tripLog = [Trip]()
+    private(set) var tripLog = [Trip]() {
+        didSet(oldValue) {
+            delegate?.tripsDidChange()
+        }
+    }
     
     var isInTripMode: Bool {
         return currentTrip != nil
     }
+    
+    weak var delegate: TripMonitorDelegate?
     
     private func checkPermission() {
         let authStatus = CLLocationManager.authorizationStatus()
@@ -115,6 +125,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         if !isInTripMode && location.isDriving {
             startTrip(location)
         } else if isInTripMode && !location.isDriving {
+            // TODO: end trip when still for 10 seconds
             endTrip(location)
         }
     }

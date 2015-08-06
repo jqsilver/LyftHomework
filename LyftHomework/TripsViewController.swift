@@ -1,25 +1,25 @@
 import UIKit
 import CoreLocation
 
-class TripsViewController: UIViewController, UITableViewDataSource {
+class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDataSource {
 
     let cellId = "tripCell"
     
     @IBOutlet weak var tableView: UITableView!
     
-    let fakeData = [
-        ("1638 3rd St > 568 Brannan St", "1:50pm-2:05pm (15min)"),
-        ("1481 3rd St > 1639 3rd St", "1:37pm-2:05pm (3min)"),
-    ]
-    
+    var data = [Trip]()
     let tripMonitor = TripMonitor()
+    let tripPresenter = TripPresenter()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
-        
+
+        data = tripMonitor.tripLog
+
+        tripMonitor.delegate = self
         tableView.dataSource = self
     }
     
@@ -33,11 +33,20 @@ class TripsViewController: UIViewController, UITableViewDataSource {
         }
     }
     
+    // MARK: getting updates from monitor
+    
+    func tripsDidChange() {
+        // TODO: do cell animations for a new trip
+        data = tripMonitor.tripLog
+        tableView.reloadData()
+    }
+    
+    
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         assert(numberOfRowsInSection == 0)
-        return fakeData.count
+        return data.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -48,10 +57,10 @@ class TripsViewController: UIViewController, UITableViewDataSource {
         cell.preservesSuperviewLayoutMargins = false
         // TODO: it still doesn't actually work though
         
-        let data = fakeData[indexPath.row]
+        let trip = data[indexPath.row]
         
-        cell.textLabel?.text = data.0
-        cell.detailTextLabel?.text = data.1
+        cell.textLabel?.text = tripPresenter.locationString(trip)
+        cell.detailTextLabel?.text = tripPresenter.timeString(trip)
         
         return cell
     }
