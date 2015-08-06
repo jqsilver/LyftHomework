@@ -2,10 +2,12 @@ import Foundation
 import CoreLocation
 
 // TODO: perist trips
-class TripMonitor {
+class TripMonitor: NSObject, CLLocationManagerDelegate {
 
-    init() {
+    override init() {
         locationManager = CLLocationManager()
+        super.init()
+        locationManager.delegate = self
     }
     
     private var locationManager: CLLocationManager
@@ -28,17 +30,17 @@ class TripMonitor {
             hasPermission = false
         case .AuthorizedAlways:
             hasPermission = true
-            enabled = true
+            reallyStartMonitoring()
             println("always")
         }
     }
     
     // MARK: on/off switch
-
     
     func disableMonitoring() {
         enabled = false
         // clear data
+        locationManager.stopUpdatingLocation()
         println("disabled")
     }
     
@@ -57,8 +59,39 @@ class TripMonitor {
     }
     
     private func reallyStartMonitoring() {
-        enabled = true
+        // TODO: maybe use "significantLocationChangeMonitoring" instead
+        if !CLLocationManager.locationServicesEnabled() {
+            println("location services still not actually available!")
+            return
+        }
+
         println("starting")
+
+        enabled = true
+        locationManager.activityType = .AutomotiveNavigation
+        // TODO: add UIBackgroundModes to Info.plist
+        locationManager.startUpdatingLocation()
+        
+    }
+    
+    // MARK: CLLocationManagerDelegate
+    
+    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == .AuthorizedAlways && enabled {
+            reallyStartMonitoring()
+        } else {
+            // TODO: figure this out
+            disableMonitoring()
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println(locations)
+        
+    }
+    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        println(error)
     }
     
 }
