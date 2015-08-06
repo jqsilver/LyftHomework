@@ -1,4 +1,5 @@
 import UIKit
+import CoreLocation
 
 class TripsViewController: UIViewController, UITableViewDataSource {
 
@@ -10,6 +11,9 @@ class TripsViewController: UIViewController, UITableViewDataSource {
         ("1638 3rd St > 568 Brannan St", "1:50pm-2:05pm (15min)"),
         ("1481 3rd St > 1639 3rd St", "1:37pm-2:05pm (3min)"),
     ]
+    
+    let tripMonitor = TripMonitor()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +27,9 @@ class TripsViewController: UIViewController, UITableViewDataSource {
     
     @IBAction func onOffToggled(sender: UISwitch) {
         if sender.on {
-            TripMonitor.sharedMonitor().enableMonitoring()
+            tripMonitor.enableMonitoring()
         } else {
-            TripMonitor.sharedMonitor().disableMonitoring()
+            tripMonitor.disableMonitoring()
         }
     }
     

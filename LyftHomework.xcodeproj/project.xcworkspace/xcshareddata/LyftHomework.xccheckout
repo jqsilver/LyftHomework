@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>CDAF29C0-6629-4C68-9B7D-7B20C7FA104C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LyftHomework</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FB3245A19C8B7EE7F4C2D5321E7F63FD0DDCAC54</key>
+		<string>github.com:jqsilver/LyftHomework.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>LyftHomework.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FB3245A19C8B7EE7F4C2D5321E7F63FD0DDCAC54</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:jqsilver/LyftHomework.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FB3245A19C8B7EE7F4C2D5321E7F63FD0DDCAC54</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FB3245A19C8B7EE7F4C2D5321E7F63FD0DDCAC54</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LyftHomework</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -15,6 +15,7 @@
 		A177A64D1B73DCBA00334542 /* LyftHomeworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A64C1B73DCBA00334542 /* LyftHomeworkTests.swift */; };
 		A177A6571B73FA2600334542 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6561B73FA2600334542 /* Trip.swift */; };
 		A177A6591B73FAC900334542 /* TripMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6581B73FAC900334542 /* TripMonitor.swift */; };
+		A177A65B1B74006000334542 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A177A65A1B74006000334542 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		A177A64C1B73DCBA00334542 /* LyftHomeworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyftHomeworkTests.swift; sourceTree = "<group>"; };
 		A177A6561B73FA2600334542 /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		A177A6581B73FAC900334542 /* TripMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMonitor.swift; sourceTree = "<group>"; };
+		A177A65A1B74006000334542 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A177A65B1B74006000334542 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +66,7 @@
 		A177A6281B73DCBA00334542 = {
 			isa = PBXGroup;
 			children = (
+				A177A65A1B74006000334542 /* CoreLocation.framework */,
 				A177A6331B73DCBA00334542 /* LyftHomework */,
 				A177A6491B73DCBA00334542 /* LyftHomeworkTests */,
 				A177A6321B73DCBA00334542 /* Products */,
