@@ -16,6 +16,13 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     // nil means we haven't checked yet
     private var hasPermission: Bool? = nil
     
+    private var currentTrip: PendingTrip? = nil
+    private var tripLog = [Trip]()
+    
+    var isInTripMode: Bool {
+        return currentTrip != nil
+    }
+    
     private func checkPermission() {
         let authStatus = CLLocationManager.authorizationStatus()
         switch (authStatus) {
@@ -39,7 +46,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     func disableMonitoring() {
         enabled = false
-        // clear data
+        currentTrip = nil
         locationManager.stopUpdatingLocation()
         println("disabled")
     }
@@ -87,11 +94,46 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         println(locations)
+        if let locations = locations as? [CLLocation] {
+            for location in locations {
+                handleLocationUpdate(location)
+            }
+        } else {
+            assert(false, "Didn't get [CLLocation] for locations")
+        }
         
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println(error)
+    }
+    
+    // MARK actual trip logging
+    
+    private func handleLocationUpdate(location: CLLocation) {
+
+        if !isInTripMode && location.isDriving {
+            startTrip(location)
+        } else if isInTripMode && !location.isDriving {
+            endTrip(location)
+        }
+    }
+    
+    private func startTrip(location: CLLocation) {
+        assert(currentTrip == nil, "trying to start a trip when one is already started!")
+        currentTrip = PendingTrip(location: location)
+        println("START: \(location)")
+    }
+    
+    private func endTrip(location: CLLocation) {
+        assert(currentTrip != nil, "trying to end nonexistant trip!")
+        if let currentTrip = currentTrip {
+            tripLog.append(Trip(pendingTrip: currentTrip, endLocation: location))
+            self.currentTrip = nil
+            println("END: \(location)")
+        }
+        
+        
     }
     
 }

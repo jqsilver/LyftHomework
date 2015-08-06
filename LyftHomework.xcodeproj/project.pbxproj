@@ -16,6 +16,8 @@
 		A177A6571B73FA2600334542 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6561B73FA2600334542 /* Trip.swift */; };
 		A177A6591B73FAC900334542 /* TripMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6581B73FAC900334542 /* TripMonitor.swift */; };
 		A177A65B1B74006000334542 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A177A65A1B74006000334542 /* CoreLocation.framework */; };
+		A177A65D1B74124100334542 /* PendingTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A65C1B74124100334542 /* PendingTrip.swift */; };
+		A177A65F1B7416C700334542 /* CLLocation+TripDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A65E1B7416C700334542 /* CLLocation+TripDetection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		A177A6561B73FA2600334542 /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		A177A6581B73FAC900334542 /* TripMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripMonitor.swift; sourceTree = "<group>"; };
 		A177A65A1B74006000334542 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		A177A65C1B74124100334542 /* PendingTrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingTrip.swift; sourceTree = "<group>"; };
+		A177A65E1B7416C700334542 /* CLLocation+TripDetection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+TripDetection.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,8 @@
 				A177A6361B73DCBA00334542 /* AppDelegate.swift */,
 				A177A6581B73FAC900334542 /* TripMonitor.swift */,
 				A177A6561B73FA2600334542 /* Trip.swift */,
+				A177A65E1B7416C700334542 /* CLLocation+TripDetection.swift */,
+				A177A65C1B74124100334542 /* PendingTrip.swift */,
 				A177A6381B73DCBA00334542 /* TripsViewController.swift */,
 				A177A63A1B73DCBA00334542 /* Main.storyboard */,
 				A177A63D1B73DCBA00334542 /* Images.xcassets */,
@@ -223,6 +229,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A177A6571B73FA2600334542 /* Trip.swift in Sources */,
+				A177A65D1B74124100334542 /* PendingTrip.swift in Sources */,
+				A177A65F1B7416C700334542 /* CLLocation+TripDetection.swift in Sources */,
 				A177A6391B73DCBA00334542 /* TripsViewController.swift in Sources */,
 				A177A6371B73DCBA00334542 /* AppDelegate.swift in Sources */,
 				A177A6591B73FAC900334542 /* TripMonitor.swift in Sources */,
