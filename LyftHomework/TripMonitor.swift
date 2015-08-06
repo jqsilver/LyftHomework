@@ -5,14 +5,11 @@ protocol TripMonitorDelegate: class {
     func tripsDidChange()
 }
 
-// TODO: perist trips
+// TODO: persist trips
 class TripMonitor: NSObject, CLLocationManagerDelegate {
-
-    override init() {
-        locationManager = CLLocationManager()
-        super.init()
-        locationManager.delegate = self
-    }
+//    let timeStillToEndTrip: NSTimeInterval = 60 // 1 minute
+    let timeStillToEndTrip: NSTimeInterval = 5
+    let carSpeed = 4.5 // meters / second, ~10 mph
     
     private var locationManager: CLLocationManager
     private(set) var enabled = false
@@ -31,7 +28,15 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         return currentTrip != nil
     }
     
+    private var becameStillAt: NSDate? = nil
+    
     weak var delegate: TripMonitorDelegate?
+    
+    override init() {
+        locationManager = CLLocationManager()
+        super.init()
+        locationManager.delegate = self
+    }
     
     private func checkPermission() {
         let authStatus = CLLocationManager.authorizationStatus()
@@ -122,17 +127,37 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     private func handleLocationUpdate(location: CLLocation) {
 
-        if !isInTripMode && location.isDriving {
-            startTrip(location)
-        } else if isInTripMode && !location.isDriving {
-            // TODO: end trip when still for 10 seconds
-            endTrip(location)
+        if isInTripMode {
+            if location.speed <= 0 {
+                handleStillness(location)
+            } else {
+                becameStillAt = nil
+            }
+        } else {
+            if location.speed >= carSpeed {
+                startTrip(location)
+            }
+        }
+    }
+    
+    // TODO: try to make more testable
+    private func handleStillness(location: CLLocation) {
+        if let becameStillAt = becameStillAt {
+            // check time difference
+            let timeStill = -becameStillAt.timeIntervalSinceNow
+            if timeStill >= timeStillToEndTrip {
+                endTrip(location)
+            }
+        } else {
+            // Record beginning of stillness
+            becameStillAt = NSDate()
         }
     }
     
     private func startTrip(location: CLLocation) {
         assert(currentTrip == nil, "trying to start a trip when one is already started!")
         currentTrip = PendingTrip(location: location)
+        becameStillAt = nil
         println("START: \(location)")
     }
     
@@ -141,6 +166,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         if let currentTrip = currentTrip {
             tripLog.append(Trip(pendingTrip: currentTrip, endLocation: location))
             self.currentTrip = nil
+            becameStillAt = nil
             println("END: \(location)")
         }
         

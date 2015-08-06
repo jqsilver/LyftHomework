@@ -14,7 +14,7 @@ class TripPresenter {
     func timeString(trip: Trip) -> String {
         let startTimeString = dateFormatter.stringFromDate(trip.startLocation.timestamp)
         let endTimeString = dateFormatter.stringFromDate(trip.endLocation.timestamp)
-        // TODO: duration later
+        // TODO: compute and format duration
         return "\(startTimeString)-\(endTimeString)"
     }
     
