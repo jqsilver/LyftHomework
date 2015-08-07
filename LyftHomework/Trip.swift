@@ -27,3 +27,9 @@ struct Trip {
     }
     
 }
+
+extension Trip : Printable {
+    var description: String {
+        return "\(startLocation) -> \(endLocation)"
+    }
+}
