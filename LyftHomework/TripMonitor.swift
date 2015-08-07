@@ -94,7 +94,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
 
         enabled = true
         locationManager.activityType = .AutomotiveNavigation
-        // TODO: add UIBackgroundModes to Info.plist
         locationManager.startUpdatingLocation()
         
     }
