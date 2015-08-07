@@ -28,7 +28,7 @@
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sc3-VD-apB" userLabel="border">
                                         <rect key="frame" x="0.0" y="59" width="320" height="1"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="ycG-Wd-mXp"/>
                                         </constraints>
@@ -101,6 +101,7 @@
                     <connections>
                         <outlet property="monitoringToggle" destination="OpK-Td-Pgv" id="iJb-oU-g97"/>
                         <outlet property="tableView" destination="uqF-Sx-nxt" id="wuN-Wy-6qb"/>
+                        <outlet property="topViewBorderHeight" destination="ycG-Wd-mXp" id="68H-nE-UZ8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

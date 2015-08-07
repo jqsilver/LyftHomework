@@ -7,6 +7,7 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     
     @IBOutlet weak var monitoringToggle: UISwitch!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var topViewBorderHeight: NSLayoutConstraint!
     
     var data = [Trip]()
     
@@ -19,6 +20,8 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
 
+        topViewBorderHeight.constant = 0.5
+        
         reloadTrips()
         
         tripMonitor.delegate = self
