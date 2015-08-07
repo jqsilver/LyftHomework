@@ -4,6 +4,7 @@ import CoreLocation
 class TripPresenter {
 
     let dateFormatter = NSDateFormatter()
+    let calendar = NSCalendar.currentCalendar()
     
     init() {
         dateFormatter.dateFormat = "h:mma"
@@ -14,11 +15,21 @@ class TripPresenter {
     func timeString(trip: Trip) -> String {
         let startTimeString = dateFormatter.stringFromDate(trip.startLocation.timestamp)
         let endTimeString = dateFormatter.stringFromDate(trip.endLocation.timestamp)
-        // TODO: compute and format duration
-        return "\(startTimeString)-\(endTimeString)"
+
+        let duration = durationString(trip)
+        return "\(startTimeString)-\(endTimeString) \(duration)"
+    }
+    
+    func durationString(trip: Trip) -> String {
+        let duration = calendar.components(.CalendarUnitMinute,
+            fromDate: trip.startLocation.timestamp,
+            toDate: trip.endLocation.timestamp,
+            options: nil)
+
+        return String(format: "(%dmin)", duration.minute)
     }
     
     func locationString(startAddress: String, endAddress: String) -> String {
-        return "\(startAddress) > \(endAddress)"
+        return "\(startAddress) \u{203A} \(endAddress)"
     }
 }

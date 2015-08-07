@@ -45,6 +45,7 @@ class GeocodingManager {
         
     }
     
+    // Get the address right away, or return nil if it's not available
     func getAddress(location: CLLocation) -> String? {
         return cache[location]
     }

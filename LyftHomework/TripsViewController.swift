@@ -8,10 +8,10 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     @IBOutlet weak var tableView: UITableView!
     
     var data = [Trip]()
+    
     let tripMonitor = TripMonitor()
     let geocodeManager = GeocodingManager()
     let tripPresenter = TripPresenter()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()

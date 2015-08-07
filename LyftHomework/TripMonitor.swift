@@ -24,6 +24,12 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    func fakeData() -> [Trip] {
+        let start = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40641700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate())
+        let end = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40641700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate(timeIntervalSinceNow: 60 * 44))
+        return [Trip(startLocation: start, endLocation: end)]
+    }
+    
     var isInTripMode: Bool {
         return currentTrip != nil
     }
@@ -36,6 +42,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         locationManager = CLLocationManager()
         super.init()
         locationManager.delegate = self
+//        tripLog = fakeData()
     }
     
     private func checkPermission() {
