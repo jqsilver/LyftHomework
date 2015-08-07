@@ -7,11 +7,11 @@ protocol TripMonitorDelegate: class {
     func monitoringPermissionDenied()
 }
 
-// TODO: persist trips
 class TripMonitor: NSObject, CLLocationManagerDelegate {
     let timeStillToEndTrip: NSTimeInterval = 60 // 1 minute
     let carSpeed = 4.5 // meters / second, ~10 mph
     
+    private var tripStore: TripStore
     private var locationManager: CLLocationManager
     private(set) var enabled = false
     
@@ -30,9 +30,11 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     weak var delegate: TripMonitorDelegate?
     
     override init() {
+        tripStore = TripStore()
         locationManager = CLLocationManager()
         super.init()
         locationManager.delegate = self
+        tripLog = tripStore.loadTrips()
     }
     
     private func checkPermission() {
@@ -163,6 +165,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             let newTrip = Trip(pendingTrip: currentTrip, endLocation: location)
             tripLog.append(newTrip)
             delegate?.tripCompleted(newTrip)
+            tripStore.saveTrips(tripLog)
             
             self.currentTrip = nil
             becameStillAt = nil

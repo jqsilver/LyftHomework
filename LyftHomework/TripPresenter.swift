@@ -26,7 +26,11 @@ class TripPresenter {
             toDate: trip.endLocation.timestamp,
             options: nil)
 
-        return String(format: "(%dmin)", duration.minute)
+        if duration.minute >= 1 {
+            return String(format: "(%dmin)", duration.minute)
+        } else {
+            return "<1min"
+        }
     }
     
     func locationString(startAddress: String, endAddress: String) -> String {
