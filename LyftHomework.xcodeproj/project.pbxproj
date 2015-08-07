@@ -20,6 +20,7 @@
 		A177A6611B741AF100334542 /* TripPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6601B741AF100334542 /* TripPresenter.swift */; };
 		A177A6631B74275F00334542 /* GeocodingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6621B74275F00334542 /* GeocodingManager.swift */; };
 		A177A6651B74436B00334542 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A177A6641B74436B00334542 /* Array.swift */; };
+		A1D7722C1B74659F00437E3F /* TripStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D7722B1B74659F00437E3F /* TripStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		A177A6601B741AF100334542 /* TripPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPresenter.swift; sourceTree = "<group>"; };
 		A177A6621B74275F00334542 /* GeocodingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeocodingManager.swift; sourceTree = "<group>"; };
 		A177A6641B74436B00334542 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		A1D7722B1B74659F00437E3F /* TripStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				A177A6361B73DCBA00334542 /* AppDelegate.swift */,
+				A1D7722B1B74659F00437E3F /* TripStore.swift */,
 				A177A6581B73FAC900334542 /* TripMonitor.swift */,
 				A177A6561B73FA2600334542 /* Trip.swift */,
 				A177A6601B741AF100334542 /* TripPresenter.swift */,
@@ -235,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A177A6571B73FA2600334542 /* Trip.swift in Sources */,
+				A1D7722C1B74659F00437E3F /* TripStore.swift in Sources */,
 				A177A65D1B74124100334542 /* PendingTrip.swift in Sources */,
 				A177A6391B73DCBA00334542 /* TripsViewController.swift in Sources */,
 				A177A6371B73DCBA00334542 /* AppDelegate.swift in Sources */,

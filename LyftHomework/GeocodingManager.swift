@@ -9,8 +9,8 @@ class GeocodingManager {
     private let geocoder = CLGeocoder()
     private var cache = [CLLocation: String]()
     
-    
-    // TODO: try to do this with NSOperations instead, see if it's any more readable
+
+    // It might more standard to use NSOperations here, but then you'd need shared mutable state, which I'd like to avoid.
     func lookupAddresses(locations: [CLLocation], completion: ([String] -> Void)) {
         // CLGeocoder wants to you to only look up one at a time, so let's do some recursive magic to chain the lookups
         if let firstLocation = locations.first {

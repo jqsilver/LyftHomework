@@ -51,9 +51,7 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     private func reloadTrips() {
         let trips = tripMonitor.tripLog
         
-        let locations = trips.flatMap { (trip) -> [CLLocation] in
-            return [trip.startLocation, trip.endLocation]
-        }
+        let locations = trips.flatMap { $0.locations }
         
         geocodeManager.lookupAddresses(locations) { addresses in
             self.data = trips
@@ -61,11 +59,23 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         }
     }
     
+    private func appendTrip(trip: Trip) {
+        tableView.beginUpdates()
+        data.append(trip)
+        let indexPaths = [NSIndexPath(forRow: data.count - 1, inSection: 0)]
+        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+        tableView.endUpdates()
+    }
+    
     func tripsDidChange() {
-        // TODO: do cell animations for a new trip
         reloadTrips()
     }
     
+    func tripCompleted(trip: Trip) {
+        geocodeManager.lookupAddresses(trip.locations) { addresses in
+            self.appendTrip(trip)
+        }
+    }
     
     // MARK: UITableViewDataSource
     

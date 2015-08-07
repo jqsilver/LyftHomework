@@ -9,3 +9,13 @@ extension Array {
         }
     }
 }
+
+func filterNil<Element>(arr: [Element?]) -> [Element] {
+    var filtered = [Element]()
+    for elem in arr {
+        if let elem = elem {
+            filtered.append(elem)
+        }
+    }
+    return filtered
+}

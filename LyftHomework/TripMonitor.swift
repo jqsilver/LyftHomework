@@ -3,6 +3,7 @@ import CoreLocation
 
 protocol TripMonitorDelegate: class {
     func tripsDidChange()
+    func tripCompleted(trip: Trip)
     func monitoringPermissionDenied()
 }
 
@@ -18,17 +19,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     private var hasPermission: Bool? = nil
     
     private var currentTrip: PendingTrip? = nil
-    private(set) var tripLog = [Trip]() {
-        didSet(oldValue) {
-            delegate?.tripsDidChange()
-        }
-    }
-    
-    func fakeData() -> [Trip] {
-        let start = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40641700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate())
-        let end = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40741700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate(timeIntervalSinceNow: 60 * 44))
-        return [Trip(startLocation: start, endLocation: end)]
-    }
+    private(set) var tripLog = [Trip]()
     
     var isInTripMode: Bool {
         return currentTrip != nil
@@ -85,17 +76,16 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     private func reallyStartMonitoring() {
         if !CLLocationManager.locationServicesEnabled() {
-            println("location services still not actually available!")
+            println("location services still not actually available")
+            delegate?.monitoringPermissionDenied()
             return
         }
 
         println("starting")
-        tripLog = fakeData()
-
+        
         enabled = true
         locationManager.activityType = .AutomotiveNavigation
         locationManager.startUpdatingLocation()
-        
     }
     
     // MARK: CLLocationManagerDelegate
@@ -146,7 +136,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    // TODO: try to make more testable
+    // In a larger project I'd try to make this more testable
     private func handleStillness(location: CLLocation) {
         if let becameStillAt = becameStillAt {
             // check time difference
@@ -170,7 +160,10 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     private func endTrip(location: CLLocation) {
         assert(currentTrip != nil, "trying to end nonexistant trip!")
         if let currentTrip = currentTrip {
-            tripLog.append(Trip(pendingTrip: currentTrip, endLocation: location))
+            let newTrip = Trip(pendingTrip: currentTrip, endLocation: location)
+            tripLog.append(newTrip)
+            delegate?.tripCompleted(newTrip)
+            
             self.currentTrip = nil
             becameStillAt = nil
             println("END: \(location)")
