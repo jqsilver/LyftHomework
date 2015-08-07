@@ -78,9 +78,9 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         assert(tableView == self.tableView)
         let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! UITableViewCell
         
-        // Apparently need this for the separator to work in ios 8
+        // Apparently need this for the separator inset to actually be 0 in ios 8
         cell.preservesSuperviewLayoutMargins = false
-        // TODO: it still doesn't actually work though
+        cell.layoutMargins = UIEdgeInsetsZero
         
         let trip = data[indexPath.row]
         
