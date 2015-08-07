@@ -3,18 +3,18 @@ import CoreLocation
 
 protocol TripMonitorDelegate: class {
     func tripsDidChange()
+    func monitoringPermissionDenied()
 }
 
 // TODO: persist trips
 class TripMonitor: NSObject, CLLocationManagerDelegate {
-//    let timeStillToEndTrip: NSTimeInterval = 60 // 1 minute
-    let timeStillToEndTrip: NSTimeInterval = 5
+    let timeStillToEndTrip: NSTimeInterval = 60 // 1 minute
     let carSpeed = 4.5 // meters / second, ~10 mph
     
     private var locationManager: CLLocationManager
     private(set) var enabled = false
     
-    // nil means we haven't checked yet
+    // nil means we haven't checked for permissions yet
     private var hasPermission: Bool? = nil
     
     private var currentTrip: PendingTrip? = nil
@@ -26,7 +26,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     func fakeData() -> [Trip] {
         let start = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40641700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate())
-        let end = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40641700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate(timeIntervalSinceNow: 60 * 44))
+        let end = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37.78583400, longitude: -122.40741700), altitude: 0, horizontalAccuracy: 0, verticalAccuracy: 0, course: 0, speed: 0, timestamp: NSDate(timeIntervalSinceNow: 60 * 44))
         return [Trip(startLocation: start, endLocation: end)]
     }
     
@@ -53,13 +53,12 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             locationManager.requestAlwaysAuthorization()
         case .Restricted, .Denied, .AuthorizedWhenInUse:
             println("denied")
-            // show an alert that this app is useless
-            enabled = false
             hasPermission = false
+            disableMonitoring()
+            delegate?.monitoringPermissionDenied()
         case .AuthorizedAlways:
             hasPermission = true
             reallyStartMonitoring()
-            println("always")
         }
     }
     
@@ -73,8 +72,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     }
     
     func enableMonitoring() {
-        // TODO: see if switch-case statement is easier to read
-        
         if let checkedPermission = hasPermission {
             if checkedPermission {
                 reallyStartMonitoring()
@@ -87,7 +84,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     }
     
     private func reallyStartMonitoring() {
-        // TODO: maybe use "significantLocationChangeMonitoring" instead
         if !CLLocationManager.locationServicesEnabled() {
             println("location services still not actually available!")
             return
@@ -106,11 +102,15 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     // MARK: CLLocationManagerDelegate
     
     func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == .AuthorizedAlways && enabled {
-            reallyStartMonitoring()
+        if status == .AuthorizedAlways {
+            if enabled {
+                reallyStartMonitoring()
+            }
         } else {
-            // TODO: figure this out
             disableMonitoring()
+            if status != .NotDetermined {
+                delegate?.monitoringPermissionDenied()
+            }
         }
     }
     
@@ -176,8 +176,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             becameStillAt = nil
             println("END: \(location)")
         }
-        
-        
     }
     
 }

@@ -2,16 +2,6 @@ import Foundation
 import CoreLocation
 import AddressBook
 
-extension Array {
-    var rest: [Element] {
-        if self.count > 1 {
-            return Array(self[1...self.count - 1])
-        } else {
-            return []
-        }
-    }
-}
-
 /**
     Wraps the CLGeocoder so we can simulate batch fetching
 */
@@ -51,7 +41,6 @@ class GeocodingManager {
     }
     
     func lookupAddress(location: CLLocation, completion: (String) -> Void) {
-        // TODO: caching would be nice
         if let address = cache[location] {
             completion(address)
             return

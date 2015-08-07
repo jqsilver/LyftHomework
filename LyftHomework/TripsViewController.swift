@@ -5,6 +5,7 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
 
     let cellId = "tripCell"
     
+    @IBOutlet weak var monitoringToggle: UISwitch!
     @IBOutlet weak var tableView: UITableView!
     
     var data = [Trip]()
@@ -18,8 +19,7 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
 
-        data = tripMonitor.tripLog
-        // TODO: need to do geocoding on launch once we start persisting
+        reloadTrips()
         
         tripMonitor.delegate = self
         tableView.dataSource = self
@@ -35,23 +35,32 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         }
     }
     
-    // MARK: getting updates from monitor
+    // MARK: TripMonitorDelegate
+
+    func monitoringPermissionDenied() {
+        let alert = UIAlertController(title: "Location Permission Denied", message: "Please enable location permission level Always", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: nil))
+        presentViewController(alert, animated: true) {
+            self.monitoringToggle.setOn(false, animated: true)
+        }
+    }
     
-    func tripsDidChange() {
-        // TODO: do cell animations for a new trip
+    private func reloadTrips() {
         let trips = tripMonitor.tripLog
         
-        // TODO: something clever and functional here
-        var locations = [CLLocation]()
-        for trip in trips {
-            locations.append(trip.startLocation)
-            locations.append(trip.endLocation)
+        let locations = trips.flatMap { (trip) -> [CLLocation] in
+            return [trip.startLocation, trip.endLocation]
         }
-
+        
         geocodeManager.lookupAddresses(locations) { addresses in
             self.data = trips
             self.tableView.reloadData()
         }
+    }
+    
+    func tripsDidChange() {
+        // TODO: do cell animations for a new trip
+        reloadTrips()
     }
     
     
