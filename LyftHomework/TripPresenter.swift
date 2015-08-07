@@ -18,11 +18,7 @@ class TripPresenter {
         return "\(startTimeString)-\(endTimeString)"
     }
     
-    func locationString(trip: Trip) -> String {
-        // TODO: geocoding!
-        let start = trip.startLocation.coordinate
-        let end = trip.endLocation.coordinate
-        
-        return "\(start) > \(end)"
+    func locationString(startAddress: String, endAddress: String) -> String {
+        return "\(startAddress) > \(endAddress)"
     }
 }

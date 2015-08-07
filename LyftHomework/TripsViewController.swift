@@ -9,6 +9,7 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     
     var data = [Trip]()
     let tripMonitor = TripMonitor()
+    let geocodeManager = GeocodingManager()
     let tripPresenter = TripPresenter()
 
     
@@ -37,8 +38,19 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     
     func tripsDidChange() {
         // TODO: do cell animations for a new trip
-        data = tripMonitor.tripLog
-        tableView.reloadData()
+        let trips = tripMonitor.tripLog
+        
+        // TODO: something clever and functional here
+        var locations = [CLLocation]()
+        for trip in trips {
+            locations.append(trip.startLocation)
+            locations.append(trip.endLocation)
+        }
+
+        geocodeManager.lookupAddresses(locations) { addresses in
+            self.data = trips
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -59,7 +71,10 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         
         let trip = data[indexPath.row]
         
-        cell.textLabel?.text = tripPresenter.locationString(trip)
+        let startLocationAddress = geocodeManager.getAddress(trip.startLocation) ?? "unfetched"
+        let endLocationAddress = geocodeManager.getAddress(trip.endLocation) ?? "unfetched"
+        
+        cell.textLabel?.text = tripPresenter.locationString(startLocationAddress, endAddress: endLocationAddress)
         cell.detailTextLabel?.text = tripPresenter.timeString(trip)
         
         return cell
