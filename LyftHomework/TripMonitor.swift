@@ -42,7 +42,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         locationManager = CLLocationManager()
         super.init()
         locationManager.delegate = self
-//        tripLog = fakeData()
     }
     
     private func checkPermission() {
@@ -95,6 +94,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         }
 
         println("starting")
+        tripLog = fakeData()
 
         enabled = true
         locationManager.activityType = .AutomotiveNavigation

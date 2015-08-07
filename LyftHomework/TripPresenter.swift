@@ -30,6 +30,6 @@ class TripPresenter {
     }
     
     func locationString(startAddress: String, endAddress: String) -> String {
-        return "\(startAddress) \u{203A} \(endAddress)"
+        return "\(startAddress) \u{276D} \(endAddress)"
     }
 }

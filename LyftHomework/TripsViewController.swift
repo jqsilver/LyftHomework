@@ -19,7 +19,8 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
 
         data = tripMonitor.tripLog
-
+        // TODO: need to do geocoding on launch once we start persisting
+        
         tripMonitor.delegate = self
         tableView.dataSource = self
     }
