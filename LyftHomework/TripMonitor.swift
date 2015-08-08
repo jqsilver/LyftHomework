@@ -15,10 +15,21 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     private var tripStore: TripStore
     private var locationManager: CLLocationManager
-    private(set) var enabled = false
     
-    // nil means we haven't checked for permissions yet
-    private var hasPermission: Bool? = nil
+    private var hasPermission: Bool? {
+        let authStatus = CLLocationManager.authorizationStatus()
+        switch (authStatus) {
+        case .NotDetermined:
+            return nil
+        case .Restricted, .Denied, .AuthorizedWhenInUse:
+            return false
+        case .AuthorizedAlways:
+            return true
+        }
+    }
+
+    // I hate having boolean flags but it's just faster this way
+    private var enabledPendingPermission = false
     
     private var currentTrip: PendingTrip? = nil
     private(set) var tripLog = [Trip]()
@@ -37,40 +48,22 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         locationManager.delegate = self
         tripLog = tripStore.loadTrips()
     }
-
-    // Check the current permission setting and react accordingly
-    private func checkPermission() {
-        let authStatus = CLLocationManager.authorizationStatus()
-        switch (authStatus) {
-        case .NotDetermined:
-            locationManager.requestAlwaysAuthorization()
-        case .Restricted, .Denied, .AuthorizedWhenInUse:
-            hasPermission = false
-            disableMonitoring()
-            delegate?.monitoringPermissionDenied()
-        case .AuthorizedAlways:
-            hasPermission = true
-            reallyStartMonitoring()
-        }
-    }
     
     // MARK: on/off switch
     
     func disableMonitoring() {
-        enabled = false
         currentTrip = nil
         locationManager.stopUpdatingLocation()
     }
     
     func enableMonitoring() {
-        if let checkedPermission = hasPermission {
-            if checkedPermission {
-                reallyStartMonitoring()
-            } else {
-                println("no permission: not enabling")
-            }
+        if hasPermission == true {
+            reallyStartMonitoring()
+        } else if hasPermission == false {
+            delegate?.monitoringPermissionDenied()
         } else {
-            checkPermission()
+            enabledPendingPermission = true
+            locationManager.requestAlwaysAuthorization()
         }
     }
     
@@ -81,7 +74,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        enabled = true
         locationManager.activityType = .AutomotiveNavigation
         locationManager.startUpdatingLocation()
     }
@@ -90,8 +82,9 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedAlways {
-            if enabled {
+            if enabledPendingPermission {
                 reallyStartMonitoring()
+                enabledPendingPermission = false
             }
         } else {
             disableMonitoring()
@@ -114,6 +107,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        // Not really sure how to react to these errors.  They're really vague.
         println(error)
     }
     
@@ -134,10 +128,9 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    // In a larger project I'd try to make this more testable
+    // In a larger project I'd try to make this more functional so it's easier to test
     private func handleStillness(location: CLLocation) {
         if let becameStillAt = becameStillAt {
-            // check time difference
             let timeStill = -becameStillAt.timeIntervalSinceNow
             if timeStill >= timeStillToEndTrip {
                 endTrip(location)
