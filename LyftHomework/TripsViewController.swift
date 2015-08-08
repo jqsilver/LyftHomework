@@ -53,13 +53,13 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         
         let locations = trips.flatMap { $0.locations }
         
-        geocodeManager.lookupAddresses(locations) { addresses in
+        geocodeManager.lookupAddresses(locations) {
             self.data = trips
             self.tableView.reloadData()
         }
     }
     
-    private func appendTrip(trip: Trip) {
+    private func addNewTrip(trip: Trip) {
         tableView.beginUpdates()
         data.append(trip)
         let indexPaths = [NSIndexPath(forRow: data.count - 1, inSection: 0)]
@@ -72,8 +72,8 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
     }
     
     func tripCompleted(trip: Trip) {
-        geocodeManager.lookupAddresses(trip.locations) { addresses in
-            self.appendTrip(trip)
+        geocodeManager.lookupAddresses(trip.locations) {
+            self.addNewTrip(trip)
         }
     }
     
@@ -94,8 +94,8 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         
         let trip = data[indexPath.row]
         
-        let startLocationAddress = geocodeManager.getAddress(trip.startLocation) ?? "unfetched"
-        let endLocationAddress = geocodeManager.getAddress(trip.endLocation) ?? "unfetched"
+        let startLocationAddress = geocodeManager.getAddress(trip.startLocation) ?? tripPresenter.fallbackLocationString(trip.startLocation)
+        let endLocationAddress = geocodeManager.getAddress(trip.endLocation) ?? tripPresenter.fallbackLocationString(trip.endLocation)
         
         cell.textLabel?.text = tripPresenter.locationString(startLocationAddress, endAddress: endLocationAddress)
         cell.detailTextLabel?.text = tripPresenter.timeString(trip)

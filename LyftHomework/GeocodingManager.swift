@@ -11,7 +11,7 @@ class GeocodingManager {
     
 
     // It might more standard to use NSOperations here, but then you'd need shared mutable state, which I'd like to avoid.
-    func lookupAddresses(locations: [CLLocation], completion: ([String] -> Void)) {
+    func lookupAddresses(locations: [CLLocation], completion: () -> Void) {
         // CLGeocoder wants to you to only look up one at a time, so let's do some recursive magic to chain the lookups
         if let firstLocation = locations.first {
 
@@ -19,28 +19,25 @@ class GeocodingManager {
             let restLocations = locations.rest
 
             // Look up the first address
-            lookupAddress(firstLocation) { firstAddress in
+            fetchAddress(firstLocation) { _ in
                 
                 // Once that comes back, make a recursive call on the rest of the locations
-                self.lookupAddresses(restLocations) { restAddresses in
-                    
-                    // Then we can just prepend our result to the beginning of the array
-                    let finalResult = [firstAddress] + restAddresses
-                    completion(finalResult)
+                self.lookupAddresses(restLocations) {
+                    completion()
                 }
             }
         } else {
-            completion([])
+            completion()
         }
         
     }
     
-    // Get the address right away, or return nil if it's not available
+    // Get the address right away, or return nil if it hasn't been fetched
     func getAddress(location: CLLocation) -> String? {
         return cache[location]
     }
     
-    func lookupAddress(location: CLLocation, completion: (String) -> Void) {
+    func fetchAddress(location: CLLocation, completion: (String?) -> Void) {
         if let address = cache[location] {
             completion(address)
             return
@@ -49,19 +46,19 @@ class GeocodingManager {
         geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
             if let error = error {
                 println(error)
-                completion("unknown")
+                completion(nil)
             }
             
             if let placemark = placemarks.last as? CLPlacemark {
-                let addressString = self.formatPlacemark(placemark)
+                let addressString = self.formatAddress(placemark)
                 self.cache[location] = addressString
                 completion(addressString)
             }
         }
     }
     
-    private func formatPlacemark(placemark: CLPlacemark) -> String {
+    private func formatAddress(placemark: CLPlacemark) -> String? {
         let addressDict = placemark.addressDictionary
-        return addressDict[kABPersonAddressStreetKey] as? String ?? "unknown"
+        return addressDict[kABPersonAddressStreetKey] as? String
     }
 }
