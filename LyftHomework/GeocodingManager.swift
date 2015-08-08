@@ -10,19 +10,20 @@ class GeocodingManager {
     private var cache = [CLLocation: String]()
     
 
+    
     // It might more standard to use NSOperations here, but then you'd need shared mutable state, which I'd like to avoid.
-    func lookupAddresses(locations: [CLLocation], completion: () -> Void) {
+    func fetchAddresses(locations: [CLLocation], completion: () -> Void) {
         // CLGeocoder wants to you to only look up one at a time, so let's do some recursive magic to chain the lookups
         if let firstLocation = locations.first {
 
-            // TODO: consider using ArraySlices everywhere
+            // ArraySlices would be faster but it's probably a premature optimization
             let restLocations = locations.rest
 
             // Look up the first address
             fetchAddress(firstLocation) { _ in
                 
                 // Once that comes back, make a recursive call on the rest of the locations
-                self.lookupAddresses(restLocations) {
+                self.fetchAddresses(restLocations) {
                     completion()
                 }
             }

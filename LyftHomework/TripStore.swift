@@ -1,11 +1,17 @@
 import Foundation
 import CoreLocation
 
+/**
+    Handles peristing a list of trips.
+*/
 class TripStore {
     
     let userDefaultsKey = "trips"
     let startTripKey = "start"
     let endTripkey = "end"
+    let latKey = "lat"
+    let lonKey = "lon"
+    let timestampKey = "timestamp"
     
     let dateFormatter = NSDateFormatter()
     
@@ -14,7 +20,7 @@ class TripStore {
     }
     
     func loadTrips() -> [Trip] {
-        if let serializedTrips = NSUserDefaults.standardUserDefaults().objectForKey(userDefaultsKey) as? [ [String: AnyObject]] {
+        if let serializedTrips = NSUserDefaults.standardUserDefaults().objectForKey(userDefaultsKey) as? [[String: AnyObject]] {
             let trips = serializedTrips.map(self.deserializeTrip)
             return filterNil(trips)
         } else {
@@ -43,6 +49,7 @@ class TripStore {
         {
             return Trip(startLocation: startLocation, endLocation: endLocation)
         } else {
+            println("something missing from trip dictionary \(tripDict)")
             return nil
         }
     }
@@ -51,16 +58,16 @@ class TripStore {
         let timestampString = dateFormatter.stringFromDate(location.timestamp)
         
         return [
-            "lat" : location.coordinate.latitude,
-            "lon" : location.coordinate.longitude,
-            "timestamp" : timestampString,
+            latKey : location.coordinate.latitude,
+            lonKey : location.coordinate.longitude,
+            timestampKey : timestampString,
         ]
     }
     
-    private func deserializeLocation(dict: [String: AnyObject]) -> CLLocation? {
-        if let lat = dict["lat"] as? CLLocationDegrees,
-           let lon = dict["lon"] as? CLLocationDegrees,
-           let timestampString = dict["timestamp"] as? String,
+    private func deserializeLocation(locationDict: [String: AnyObject]) -> CLLocation? {
+        if let lat = locationDict[latKey] as? CLLocationDegrees,
+           let lon = locationDict[lonKey] as? CLLocationDegrees,
+           let timestampString = locationDict[timestampKey] as? String,
            let timestamp = dateFormatter.dateFromString(timestampString)
         {
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -73,6 +80,7 @@ class TripStore {
                 timestamp: timestamp
             )
         } else {
+            println("something was missing from location dictionary \(locationDict)")
             return nil
         }
     }

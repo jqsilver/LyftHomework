@@ -1,6 +1,9 @@
 import Foundation
 import CoreLocation
 
+/**
+    Builds all the strings associated with displaying aa Trip
+*/
 class TripPresenter {
 
     let dateFormatter = NSDateFormatter()
@@ -21,7 +24,7 @@ class TripPresenter {
         return "\(startTimeString)-\(endTimeString) \(duration)"
     }
     
-    func durationString(trip: Trip) -> String {
+    private func durationString(trip: Trip) -> String {
         let duration = calendar.components(.CalendarUnitMinute,
             fromDate: trip.startLocation.timestamp,
             toDate: trip.endLocation.timestamp,

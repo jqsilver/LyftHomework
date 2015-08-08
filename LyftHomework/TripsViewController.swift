@@ -20,12 +20,12 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
 
         navigationItem.titleView = UIImageView(image: UIImage(named: "navbar"))
 
+        // Can't get hairlines in IB.  Also I know this will look weird on 6+, but it's pretty close
         topViewBorderHeight.constant = 0.5
-        
-        reloadTrips()
         
         tripMonitor.delegate = self
         tableView.dataSource = self
+        fetchAddressesAndReloadData()
     }
     
     // MARK: on/off switch 
@@ -48,12 +48,12 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         }
     }
     
-    private func reloadTrips() {
+    private func fetchAddressesAndReloadData() {
         let trips = tripMonitor.tripLog
         
         let locations = trips.flatMap { $0.locations }
         
-        geocodeManager.lookupAddresses(locations) {
+        geocodeManager.fetchAddresses(locations) {
             self.data = trips
             self.tableView.reloadData()
         }
@@ -67,12 +67,8 @@ class TripsViewController: UIViewController, TripMonitorDelegate, UITableViewDat
         tableView.endUpdates()
     }
     
-    func tripsDidChange() {
-        reloadTrips()
-    }
-    
     func tripCompleted(trip: Trip) {
-        geocodeManager.lookupAddresses(trip.locations) {
+        geocodeManager.fetchAddresses(trip.locations) {
             self.addNewTrip(trip)
         }
     }

@@ -2,11 +2,13 @@ import Foundation
 import CoreLocation
 
 protocol TripMonitorDelegate: class {
-    func tripsDidChange()
     func tripCompleted(trip: Trip)
     func monitoringPermissionDenied()
 }
 
+/**
+    Talks to CLLocationManager and generates and tracks Trips.
+*/
 class TripMonitor: NSObject, CLLocationManagerDelegate {
     let timeStillToEndTrip: NSTimeInterval = 60 // 1 minute
     let carSpeed = 4.5 // meters / second, ~10 mph
@@ -20,14 +22,13 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
     
     private var currentTrip: PendingTrip? = nil
     private(set) var tripLog = [Trip]()
+    private var becameStillAt: NSDate? = nil
+    
+    weak var delegate: TripMonitorDelegate?
     
     var isInTripMode: Bool {
         return currentTrip != nil
     }
-    
-    private var becameStillAt: NSDate? = nil
-    
-    weak var delegate: TripMonitorDelegate?
     
     override init() {
         tripStore = TripStore()
@@ -36,16 +37,14 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         locationManager.delegate = self
         tripLog = tripStore.loadTrips()
     }
-    
+
+    // Check the current permission setting and react accordingly
     private func checkPermission() {
         let authStatus = CLLocationManager.authorizationStatus()
         switch (authStatus) {
         case .NotDetermined:
-            // actually request permission
-            println("requesting permission")
             locationManager.requestAlwaysAuthorization()
         case .Restricted, .Denied, .AuthorizedWhenInUse:
-            println("denied")
             hasPermission = false
             disableMonitoring()
             delegate?.monitoringPermissionDenied()
@@ -61,7 +60,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
         enabled = false
         currentTrip = nil
         locationManager.stopUpdatingLocation()
-        println("disabled")
     }
     
     func enableMonitoring() {
@@ -69,7 +67,7 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             if checkedPermission {
                 reallyStartMonitoring()
             } else {
-                println("no permission: not enabled")
+                println("no permission: not enabling")
             }
         } else {
             checkPermission()
@@ -82,8 +80,6 @@ class TripMonitor: NSObject, CLLocationManagerDelegate {
             delegate?.monitoringPermissionDenied()
             return
         }
-
-        println("starting")
         
         enabled = true
         locationManager.activityType = .AutomotiveNavigation

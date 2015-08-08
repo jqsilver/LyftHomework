@@ -10,6 +10,7 @@ extension Array {
     }
 }
 
+// Filters an array of optionals into an array of non-optionals, with nice type guarantees
 func filterNil<Element>(arr: [Element?]) -> [Element] {
     var filtered = [Element]()
     for elem in arr {
